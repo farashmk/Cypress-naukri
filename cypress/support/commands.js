@@ -1,4 +1,4 @@
-import 'cypress-file-upload';
+import "cypress-file-upload";
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -21,7 +21,14 @@ import 'cypress-file-upload';
 // -- This is a dual command --
 // Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
 //
-
+Cypress.Commands.add("visitnaukri", (hrefurl) => {
+  cy.visit(hrefurl, {
+    headers: {
+      accept: "text/html",
+      "user-agent": "axios/0.27.2",
+    },
+  });
+});
 
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
