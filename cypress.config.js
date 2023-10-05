@@ -10,8 +10,8 @@ module.exports = defineConfig({
     env: {
       registration_end_point: "registration/createAccount?othersrcp=22636",
       login_end_point: "nlogin/login",
-      username: "farazabida@gmail.com",
-      password: "7996063603",
+      username: "********@gmail.com",
+      password: "*******",
       // fullname:'',
       // email:'',
       // password:'',
