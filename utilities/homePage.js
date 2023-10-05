@@ -1,0 +1,18 @@
+export  const homeelements={
+        welcomename:'.content > span',
+        jobsnavbar:'.nI-gNb-custom-Jobs > .nI-gNb-menuItems__anchorDropdown > div',
+        companiesnavbar:':nth-child(2) > .nI-gNb-menuItems__anchorDropdown > div',
+        servicesnavbar:':nth-child(3) > .nI-gNb-menuItems__anchorDropdown > div',
+        searchplaceholder:'.nI-gNb-sb__placeholder',
+        notificationicon:'.nI-gNb-nc__icon-wrapper > .ni-gnb-icn',
+        profileicon:'.nI-gNb-icon-img',
+        profilemenuicon:'.nI-gNb-drawer__bars',
+        leftnavprofilepic:'.user-img',
+        leftnavcompleteprofilebtn:'.button-wrapper',
+        leftnavmyhome:'.highlighted > span',
+        leftnavjobs:'.tabs-ul > :nth-child(2) > span',
+        leftnavcompanies:'.tabs-ul > :nth-child(3) > span',
+        leftnavblogs:':nth-child(4) > span',
+        recommendedjobs1:'[data-slide-index="0"] > .ni-citem-content > .tupleWrap > .cust-job-tuple',
+        parentofallcomapany:'.tupleContainer',
+    }
