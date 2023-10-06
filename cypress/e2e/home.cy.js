@@ -7,8 +7,7 @@ const Todo = new Login();
 const Toho = new home();
 
 describe("Home Page Test Suit", () => {
-  it.only("searching and saving first listed job", () => {
-    Todo.loginNaviagtioncommon();
+  it("searching and saving first listed job", () => {
     Todo.siginCommon(Cypress.env("username"), Cypress.env("password"));
     cy.title().should("equal", "Home | Mynaukri"); //assertion For Checking Redirected To HomePage
     Toho.searchtab("analyst", "bangalore", 2);
@@ -29,7 +28,6 @@ describe("Home Page Test Suit", () => {
       // Check if the child element with specific text is present within the parent
       if (parentelement.find(companyelements.savebutton).length > 0) {
         cy.get(companyelements.savebutton).click(); //clicking save button
-        cy.log("job Saved");
       } else if (parentelement.find(companyelements.savedbutton).length > 0) {
         cy.log("Job Already Saved");
       }
@@ -49,14 +47,21 @@ describe("Home Page Test Suit", () => {
     });
   });
   it("checking search result functionality", () => {
-    Todo.loginNaviagtioncommon();
     Todo.siginCommon(Cypress.env("username"), Cypress.env("password"));
     cy.title().should("equal", "Home | Mynaukri"); //assertion For Checking Redirected To HomePage
-    Toho.searchtab(" ", "bangalore", "2");
+    Toho.searchtab("sales", "bangalore", "2");
+    cy.wait(2000);
+    //Assertion That Checks Search Result Matches The Job Titles
+    Toho.searchlistAssertion(homeelements.joblisttitle, "sales");
+    //Assertion For Checks Search Result Matches The Job Location
+    Toho.searchlistAssertion(
+      homeelements.joblistlocation,
+      "bangalore" || "bengaluru"
+    );
+    Toho.searchlistExperienceAssertion("2");
   });
 
   it("Follow Companies", () => {
-    Todo.loginNaviagtioncommon();
     Todo.siginCommon(Cypress.env("username"), Cypress.env("password"));
     cy.title().should("equal", "Home | Mynaukri"); //assertion For Checking Redirected To HomePage
     cy.get(homeelements.companiesnavbar).click();
@@ -81,5 +86,62 @@ describe("Home Page Test Suit", () => {
           .click({ force: true }); //clicked to Following
       }
     });
+  });
+
+  it("test for checking search filter workmode hybrid", () => {
+    Toho.siginhomeCommon();
+    cy.title().should("equal", "Home | Mynaukri"); //assertion For Checking Redirected To HomePage
+    Toho.searchtab("sales", "bangalore", "2");
+    cy.wait(2000);
+    cy.get(homeelements.workmodehybridchkbox).check({ force: true });
+    cy.wait(3000);
+    Toho.searchlistAssertion(homeelements.joblistlocation, "hybrid");
+  });
+  it("test for checking search filter workmode remote", () => {
+    Toho.siginhomeCommon();
+    cy.title().should("equal", "Home | Mynaukri"); //assertion For Checking Redirected To HomePage
+    Toho.searchtab("developer", "mumbai", "0");
+    cy.wait(2000);
+    cy.get(homeelements.workModeRemotechkbox).check({ force: true });
+    cy.wait(3000);
+    Toho.searchlistAssertion(homeelements.joblistlocation, "remote");
+  });
+  it("test for checking search filter workmode temp home due to covid", () => {
+    Toho.siginhomeCommon(Cypress.env("username"), Cypress.env("password"));
+    cy.title().should("equal", "Home | Mynaukri"); //assertion For Checking Redirected To HomePage
+    Toho.searchtab("developer", "delhi", "0");
+    cy.wait(2000);
+    cy.get(homeelements.workmodetempwfhchkbox).check({ force: true });
+    cy.wait(3000);
+    Toho.searchlistAssertion(homeelements.joblistlocation, "temp");
+  });
+  it("Test for selecting Recommended Jobs", () => {
+    Toho.siginhomeCommon();
+    Toho.searchtab("mechanic", "mumbai", "4");
+    cy.wait(2500);
+    cy.get(homeelements.jobsnavbar).trigger("mouseover");
+    cy.wait(1500);
+    cy.get(homeelements.jobnavrecommendedjob).click();
+    cy.wait(2000);
+    cy.get(homeelements.recommendedjobtitle)
+      .should("be.visible")
+      .then((txt) => {
+        const recommendedtext = txt.text();
+        expect(recommendedtext).to.contain("Recomended Jobs");
+      });
+  });
+  it.only("Test For selecting Saved Jobs", () => {
+    Toho.siginhomeCommon();
+    cy.wait(2000);
+    cy.get(homeelements.jobsnavbar).trigger("mouseover");
+    cy.wait(1500);
+    cy.get(homeelements.jobnavsavedjobs).click();
+    cy.wait(2000);
+    cy.get(homeelements.savedjobpagelabel)
+      .should("be.visible")
+      .then((txt) => {
+        const recommendedtext = txt.text();
+        expect(recommendedtext).to.contain("Jobs saved");
+      });
   });
 });

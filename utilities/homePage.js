@@ -21,4 +21,21 @@ export const homeelements = {
   recommendedjobs1:
     '[data-slide-index="0"] > .ni-citem-content > .tupleWrap > .cust-job-tuple',
   parentofallcomapany: ".tupleContainer",
+  parentofalljobslist: ".styles_jlc__main__VdwtF",
+  joblisttitle: "a.title",
+  joblistlocation: ".locWdth",
+  joblistexperience: ".expwdth",
+  workModeRemotechkbox: "#chk-Remote-wfhType-",
+  workmodehybridchkbox: "#chk-Hybrid-wfhType-",
+  workmodetempwfhchkbox: `[id='chk-Temp. WFH due to covid-wfhType-']`,
+  jobnavrecommendedjob: ".nI-gNb-dropdownMenuGroup > :nth-child(1) > a > div",
+  jobnavjobfromrecruiter: ".nI-gNb-dropdownMenuGroup > :nth-child(1) > a > div",
+  jobnavjobsfromalerts:
+    ".nI-gNb-custom-Jobs > .nI-gNb-dropdown > .nI-gNb-dropdownMenuGroup > :nth-child(3) > a > div",
+  jobnavapplicationstatus:
+    ".nI-gNb-custom-Jobs > .nI-gNb-dropdown > .nI-gNb-dropdownMenuGroup > :nth-child(4) > a > :nth-child(1)",
+  jobnavsavedjobs:
+    ".nI-gNb-custom-Jobs > .nI-gNb-dropdown > .nI-gNb-dropdownMenuGroup > :nth-child(5) > a > div",
+  recommendedjobtitle: ".reco-head-txt",
+  savedjobpagelabel: ".countLabel",
 };
