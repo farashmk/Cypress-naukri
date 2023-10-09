@@ -27,7 +27,7 @@ export class home {
     cy.get(homeelements.searchkeytxt).type(job);
     cy.get(homeelements.searchexperiencedropdown).click();
     cy.get(homeelements.searchexperiencedropdownlistparent).within(() => {
-      cy.get("[index]").eq(experience).click();
+      cy.get("[index]").eq(experience).scrollIntoView().click();
     });
     cy.get(homeelements.searchkeylocationtxt).type(location);
     cy.get(homeelements.searchlookup).click();

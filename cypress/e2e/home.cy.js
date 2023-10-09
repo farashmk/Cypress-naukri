@@ -7,12 +7,18 @@ const Todo = new Login();
 const Toho = new home();
 
 describe("Home Page Test Suit", () => {
+  beforeEach(() => {
+    cy.session("login", () => {
+      Toho.siginhomeCommon();
+    });
+  });
   it("searching and saving first listed job", () => {
-    Todo.siginCommon(Cypress.env("username"), Cypress.env("password"));
+    cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
+    // Toho.siginhomeCommon();
     cy.title().should("equal", "Home | Mynaukri"); //assertion For Checking Redirected To HomePage
     Toho.searchtab("analyst", "bangalore", 2);
     cy.wait(2000);
-    cy.get(".srp-jobtuple-wrapper")
+    cy.get(homeelements.parentofsinglejoblist)
       .eq(0)
       .within(() => {
         cy.get("a[href]")
@@ -47,7 +53,8 @@ describe("Home Page Test Suit", () => {
     });
   });
   it("checking search result functionality", () => {
-    Todo.siginCommon(Cypress.env("username"), Cypress.env("password"));
+    cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
+    // Toho.siginhomeCommon();
     cy.title().should("equal", "Home | Mynaukri"); //assertion For Checking Redirected To HomePage
     Toho.searchtab("sales", "bangalore", "2");
     cy.wait(2000);
@@ -62,7 +69,8 @@ describe("Home Page Test Suit", () => {
   });
 
   it("Follow Companies", () => {
-    Todo.siginCommon(Cypress.env("username"), Cypress.env("password"));
+    cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
+    //Toho.siginhomeCommon();
     cy.title().should("equal", "Home | Mynaukri"); //assertion For Checking Redirected To HomePage
     cy.get(homeelements.companiesnavbar).click();
     cy.get(homeelements.parentofallcomapany).within(() => {
@@ -89,7 +97,8 @@ describe("Home Page Test Suit", () => {
   });
 
   it("test for checking search filter workmode hybrid", () => {
-    Toho.siginhomeCommon();
+    cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
+    // Toho.siginhomeCommon();
     cy.title().should("equal", "Home | Mynaukri"); //assertion For Checking Redirected To HomePage
     Toho.searchtab("sales", "bangalore", "2");
     cy.wait(2000);
@@ -98,7 +107,8 @@ describe("Home Page Test Suit", () => {
     Toho.searchlistAssertion(homeelements.joblistlocation, "hybrid");
   });
   it("test for checking search filter workmode remote", () => {
-    Toho.siginhomeCommon();
+    cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
+    // Toho.siginhomeCommon();
     cy.title().should("equal", "Home | Mynaukri"); //assertion For Checking Redirected To HomePage
     Toho.searchtab("developer", "mumbai", "0");
     cy.wait(2000);
@@ -107,7 +117,8 @@ describe("Home Page Test Suit", () => {
     Toho.searchlistAssertion(homeelements.joblistlocation, "remote");
   });
   it("test for checking search filter workmode temp home due to covid", () => {
-    Toho.siginhomeCommon(Cypress.env("username"), Cypress.env("password"));
+    cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
+    // Toho.siginhomeCommon(Cypress.env("username"), Cypress.env("password"));
     cy.title().should("equal", "Home | Mynaukri"); //assertion For Checking Redirected To HomePage
     Toho.searchtab("developer", "delhi", "0");
     cy.wait(2000);
@@ -116,7 +127,8 @@ describe("Home Page Test Suit", () => {
     Toho.searchlistAssertion(homeelements.joblistlocation, "temp");
   });
   it("Test for selecting Recommended Jobs", () => {
-    Toho.siginhomeCommon();
+    cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
+    //Toho.siginhomeCommon();
     Toho.searchtab("mechanic", "mumbai", "4");
     cy.wait(2500);
     cy.get(homeelements.jobsnavbar).trigger("mouseover");
@@ -127,11 +139,12 @@ describe("Home Page Test Suit", () => {
       .should("be.visible")
       .then((txt) => {
         const recommendedtext = txt.text();
-        expect(recommendedtext).to.contain("Recomended Jobs");
+        expect(recommendedtext).to.contain("Recommended Jobs for You");
       });
   });
-  it.only("Test For selecting Saved Jobs", () => {
-    Toho.siginhomeCommon();
+  it("Test For selecting Saved Jobs", () => {
+    cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
+    //Toho.siginhomeCommon();
     cy.wait(2000);
     cy.get(homeelements.jobsnavbar).trigger("mouseover");
     cy.wait(1500);
@@ -142,6 +155,35 @@ describe("Home Page Test Suit", () => {
       .then((txt) => {
         const recommendedtext = txt.text();
         expect(recommendedtext).to.contain("Jobs saved");
+      });
+  });
+  it.only("Checking Functionality Additional Filter Location", () => {
+    cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
+    cy.title().should("equal", "Home | Mynaukri"); //assertion For Checking Redirected To HomePage
+    Toho.searchtab("android developer", "delhi", "2");
+    cy.wait(4000);
+    cy.get(homeelements.parentoffilter)
+      .eq(11)
+      .within(() => {
+        cy.get(homeelements.parentofallfiltercheckbox)
+          .eq(0)
+          .within(() => {
+            cy.get("input").scrollIntoView().check({ force: true });
+            cy.get("class='styles_chkLbl__n2x09'").within(() => {
+              cy.get("p").within(() => {
+                cy.get(
+                  "[class='styles_ellipsis__cvWP1 styles_filterLabel__jRP04']"
+                )
+                  .invoke("text")
+                  .then((textofplace) => {
+                    Toho.searchlistAssertion(
+                      homeelements.joblistlocation,
+                      textofplace
+                    );
+                  });
+              });
+            });
+          });
       });
   });
 });
