@@ -23,7 +23,7 @@ export const homeelements = {
   parentofallcomapany: ".tupleContainer",
   parentofalljobslist: ".styles_jlc__main__VdwtF",
   parentoffilter: "[class='styles_filterContainer__4aQaD']",
-  parentofallfiltercheckbox: ".styles_chckBoxCont__t_dRs",
+  parentofallfiltercheckbox: "[class='styles_filterOptns__1vq77']",
   parentofsinglejoblist: ".srp-jobtuple-wrapper",
   joblisttitle: "a.title",
   joblistlocation: ".locWdth",

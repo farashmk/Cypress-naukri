@@ -12,6 +12,7 @@ describe("Home Page Test Suit", () => {
       Toho.siginhomeCommon();
     });
   });
+  let location = [];
   it("searching and saving first listed job", () => {
     cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
     // Toho.siginhomeCommon();
@@ -160,30 +161,80 @@ describe("Home Page Test Suit", () => {
   it.only("Checking Functionality Additional Filter Location", () => {
     cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
     cy.title().should("equal", "Home | Mynaukri"); //assertion For Checking Redirected To HomePage
+    cy.wait(3000);
     Toho.searchtab("android developer", "delhi", "2");
     cy.wait(4000);
-    cy.get(homeelements.parentoffilter)
-      .eq(11)
+    cy.get("[data-filter-id='citiesGid']")
       .within(() => {
-        cy.get(homeelements.parentofallfiltercheckbox)
+        cy.get(".styles_chckBoxCont__t_dRs")
           .eq(0)
           .within(() => {
-            cy.get("input").scrollIntoView().check({ force: true });
-            cy.get("class='styles_chkLbl__n2x09'").within(() => {
-              cy.get("p").within(() => {
+            cy.get("[class='styles_ellipsis__cvWP1 styles_filterLabel__jRP04']")
+              .invoke("text")
+              .then((textofplace) => {
+                let loc = textofplace;
+                cy.log(loc);
+                location.push(loc);
                 cy.get(
                   "[class='styles_ellipsis__cvWP1 styles_filterLabel__jRP04']"
-                )
-                  .invoke("text")
-                  .then((textofplace) => {
-                    Toho.searchlistAssertion(
-                      homeelements.joblistlocation,
-                      textofplace
-                    );
-                  });
+                ).click();
+                cy.wait(2000);
               });
-            });
           });
+      })
+      .then(() => {
+        // This block will execute after the cy.get() block is complete.
+        cy.log(location[0]);
+        const expectedlocation = location[0].toLowerCase().trim();
+        cy.get(homeelements.joblistlocation).each((customName) => {
+          let lowercaseelement = customName.text().toLowerCase().trim();
+          const cleanedLocationText = lowercaseelement.replace(/\u00A0/g, " ");
+          cy.log(cleanedLocationText);
+          expect(cleanedLocationText).to.include(expectedlocation);
+        });
       });
+  });
+  it("Checking Functionality Additional Filter Location", () => {
+    cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
+    cy.title().should("equal", "Home | Mynaukri"); // Assertion For Checking Redirected To HomePage
+    cy.wait(3000);
+    Toho.searchtab("android developer", "delhi", "2");
+    cy.wait(4000);
+
+    const location = []; // Array to store the selected location(s)
+
+    cy.get("[data-filter-id='citiesGid']").within(() => {
+      cy.get(".styles_chckBoxCont__t_dRs")
+        .eq(0)
+        .within(() => {
+          cy.get("[class='styles_ellipsis__cvWP1 styles_filterLabel__jRP04']")
+            .invoke("text")
+            .then((textofplace) => {
+              let loc = textofplace.trim();
+              cy.log(loc);
+              location.push(loc);
+              cy.get(
+                "[class='styles_ellipsis__cvWP1 styles_filterLabel__jRP04']"
+              ).click();
+              cy.wait(2000);
+            });
+        });
+    });
+
+    cy.get(homeelements.joblistlocation).each((customName) => {
+      location.forEach((expectedlocation) => {
+        customName.invoke("text").then((locationText) => {
+          const lowercaseLocationText = locationText.toLowerCase().trim();
+          const cleanedLocationText = lowercaseLocationText.replace(
+            /\u00A0/g,
+            " "
+          );
+          cy.log(cleanedLocationText);
+          expect(cleanedLocationText).to.include(
+            expectedlocation.toLowerCase()
+          );
+        });
+      });
+    });
   });
 });
