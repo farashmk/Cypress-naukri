@@ -12,7 +12,8 @@ export class home {
       if (
         key != "invalidusererrorlabel" &&
         key != "usernameblnkerrorlabel" &&
-        key != "passwordblankerrorlabel"
+        key != "passwordblankerrorlabel" &&
+        key != "updateprofile"
       ) {
         cy.get(login[key]).scrollIntoView().should("be.visible");
       }

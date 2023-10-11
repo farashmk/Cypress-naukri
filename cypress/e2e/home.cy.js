@@ -8,6 +8,7 @@ const Toho = new home();
 
 describe("Home Page Test Suit", () => {
   beforeEach(() => {
+    cy.viewport(1280, 720);
     cy.session("login", () => {
       Toho.siginhomeCommon();
     });
@@ -158,7 +159,7 @@ describe("Home Page Test Suit", () => {
         expect(recommendedtext).to.contain("Jobs saved");
       });
   });
-  it.only("Checking Functionality Additional Filter Location", () => {
+  it("Checking Functionality Additional Filter Location", () => {
     cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
     cy.title().should("equal", "Home | Mynaukri"); //assertion For Checking Redirected To HomePage
     cy.wait(3000);
@@ -194,47 +195,102 @@ describe("Home Page Test Suit", () => {
         });
       });
   });
-  it("Checking Functionality Additional Filter Location", () => {
+  it("Update Profile Page", () => {
     cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
-    cy.title().should("equal", "Home | Mynaukri"); // Assertion For Checking Redirected To HomePage
-    cy.wait(3000);
-    Toho.searchtab("android developer", "delhi", "2");
-    cy.wait(4000);
-
-    const location = []; // Array to store the selected location(s)
-
-    cy.get("[data-filter-id='citiesGid']").within(() => {
-      cy.get(".styles_chckBoxCont__t_dRs")
-        .eq(0)
-        .within(() => {
-          cy.get("[class='styles_ellipsis__cvWP1 styles_filterLabel__jRP04']")
-            .invoke("text")
-            .then((textofplace) => {
-              let loc = textofplace.trim();
-              cy.log(loc);
-              location.push(loc);
-              cy.get(
-                "[class='styles_ellipsis__cvWP1 styles_filterLabel__jRP04']"
-              ).click();
-              cy.wait(2000);
-            });
-        });
-    });
-
-    cy.get(homeelements.joblistlocation).each((customName) => {
-      location.forEach((expectedlocation) => {
-        customName.invoke("text").then((locationText) => {
-          const lowercaseLocationText = locationText.toLowerCase().trim();
-          const cleanedLocationText = lowercaseLocationText.replace(
-            /\u00A0/g,
-            " "
-          );
-          cy.log(cleanedLocationText);
-          expect(cleanedLocationText).to.include(
-            expectedlocation.toLowerCase()
-          );
-        });
+    cy.title().should("equal", "Home | Mynaukri");
+    cy.get(homeelements.profilemenuicon).click();
+    cy.get(homeelements.updateprofile).click();
+    cy.title().should("contain", "Profile");
+  });
+  it("service resume Navbar", () => {
+    cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
+    cy.title().should("equal", "Home | Mynaukri");
+    cy.get(homeelements.servicesnavbar).trigger("mouseover");
+    cy.get(homeelements.textresumelink)
+      .invoke("attr", "href")
+      .then((hrefdata) => {
+        cy.visitnaukri(hrefdata);
+        cy.get(homeelements.resumemakingtitle)
+          .invoke("text")
+          .then((txt) => {
+            expect(txt).contain("Text Resume");
+          });
       });
-    });
+  });
+  it("service visual resume Navbar", () => {
+    cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
+    cy.title().should("equal", "Home | Mynaukri");
+    cy.get(homeelements.servicesnavbar).trigger("mouseover");
+    cy.get(homeelements.visualresumelink)
+      .invoke("attr", "href")
+      .then((hrefdata) => {
+        cy.visitnaukri(hrefdata);
+        cy.get(homeelements.resumemakingtitle)
+          .invoke("text")
+          .then((txt) => {
+            expect(txt).contain("Visual Resume");
+          });
+      });
+  });
+  it("service contactUs Navbar", () => {
+    cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
+    cy.title().should("equal", "Home | Mynaukri");
+    cy.get(homeelements.servicesnavbar).trigger("mouseover");
+    cy.get(homeelements.contactuslinkservicenav)
+      .invoke("attr", "href")
+      .then((hrefdata) => {
+        cy.visitnaukri(hrefdata);
+        cy.title().should("include", "Contact Us");
+        cy.get(homeelements.aboutususernametxt)
+          .invoke("val")
+          .should("contains", Cypress.env("username"));
+      });
+  });
+  it("service Resume Display Navbar", () => {
+    cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
+    cy.title().should("equal", "Home | Mynaukri");
+    cy.get(homeelements.servicesnavbar).trigger("mouseover");
+    cy.get(homeelements.resumedisplaylink)
+      .invoke("attr", "href")
+      .then((hrefdata) => {
+        cy.visitnaukri(hrefdata);
+        cy.title().should("include", "Resume Display");
+      });
+  });
+  it("service Job Search Booster Navbar", () => {
+    cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
+    cy.title().should("equal", "Home | Mynaukri");
+    cy.get(homeelements.servicesnavbar).trigger("mouseover");
+    cy.get(homeelements.jobsearchboosterlink)
+      .invoke("attr", "href")
+      .then((hrefdata) => {
+        cy.visitnaukri(hrefdata);
+        cy.title().should("include", "Job Search Booster");
+      });
+  });
+  it.only("service resume Score Navbar", () => {
+    cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
+    cy.title().should("equal", "Home | Mynaukri");
+    cy.get(homeelements.servicesnavbar).trigger("mouseover");
+    cy.get(homeelements.resumequalityscorelink)
+      .invoke("attr", "href")
+      .then((hrefdata) => {
+        cy.visitnaukri(hrefdata);
+        cy.title().should("include", "Resume Score Checker");
+      });
+  });
+  it.only("service resume Sample Navbar", () => {
+    cy.visitnaukri(`/${Cypress.env("login_end_point")}`);
+    cy.title().should("equal", "Home | Mynaukri");
+    cy.get(homeelements.servicesnavbar).trigger("mouseover");
+    cy.get(homeelements.resumesamplelink)
+      .invoke("attr", "href")
+      .then((hrefdata) => {
+        cy.visitnaukri(hrefdata);
+        cy.get('[class="header-text-bg"]').should(
+          "contain.text",
+          "Resume Samples"
+        );
+      });
   });
 });
